@@ -1,0 +1,10 @@
+enum PROJECTS {
+  mstable
+  balancer
+  uniswap
+  blocks
+  curve
+}
+
+# https://github.com/habx/apollo-multi-endpoint-link
+directive @api(name: PROJECTS) on QUERY

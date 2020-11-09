@@ -1,0 +1,267 @@
+specVersion: 0.0.2
+description: mStable
+repository: https://gitlab.com/mstable/mstable-graph
+schema:
+  file: ./schema.graphql
+
+dataSources:
+  - kind: ethereum/contract
+    name: MUSD
+    network: '{{network}}'
+    source:
+      abi: Masset
+      address: '{{address_mUSD}}'
+      startBlock: {{startBlock_mUSD}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/MUSD.ts
+      entities:
+        - Account
+        - AccountBalance
+        - Basket
+        - Basset
+        - Token
+      abis:
+        - name: Masset
+          file: ./abis/Masset.json
+        - name: ERC20Detailed
+          file: ./abis/ERC20Detailed.json
+        - name: BasketManager
+          file: ./abis/BasketManager.json
+      eventHandlers:
+        - event: Minted(indexed address,address,uint256,address,uint256)
+          handler: handleMinted
+        - event: MintedMulti(indexed address,address,uint256,address[],uint256[])
+          handler: handleMintedMulti
+        - event: Swapped(indexed address,address,address,uint256,address)
+          handler: handleSwapped
+        - event: Redeemed(indexed address,address,uint256,address[],uint256[])
+          handler: handleRedeemed
+        - event: RedeemedMasset(indexed address,address,uint256)
+          handler: handleRedeemedMasset
+        - event: PaidFee(indexed address,address,uint256)
+          handler: handlePaidFee
+        - event: SwapFeeChanged(uint256)
+          handler: handleSwapFeeChanged
+        - event: RedemptionFeeChanged(uint256)
+          handler: handleRedemptionFeeChanged
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+
+  - kind: ethereum/contract
+    name: SavingsManager
+    network: '{{network}}'
+    source:
+      abi: SavingsManager
+      address: '{{address_SavingsManager}}'
+      startBlock: {{startBlock_SavingsManager}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/SavingsManager.ts
+      entities:
+        - Account
+        - AccountBalance
+        - Token
+        - ExchangeRate
+        - Masset
+      abis:
+        - name: SavingsManager
+          file: ./abis/SavingsManager.json
+        - name: Masset
+          file: ./abis/Masset.json
+        - name: ERC20Detailed
+          file: ./abis/ERC20Detailed.json
+        - name: BasketManager
+          file: ./abis/BasketManager.json
+      eventHandlers:
+        - event: SavingsContractAdded(indexed address,address)
+          handler: handleSavingsContractAdded
+        - event: SavingsRateChanged(uint256)
+          handler: handleSavingsRateChanged
+
+  - kind: ethereum/contract
+    name: BasketManager
+    network: '{{network}}'
+    source:
+      abi: BasketManager
+      address: '{{address_BasketManager}}'
+      startBlock: {{startBlock_BasketManager}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/BasketManager.ts
+      entities:
+        - BasketManager
+        - Basket
+        - Basset
+        - Token
+      abis:
+        - name: BasketManager
+          file: ./abis/BasketManager.json
+        - name: Masset
+          file: ./abis/Masset.json
+        - name: ERC20Detailed
+          file: ./abis/ERC20Detailed.json
+      eventHandlers:
+        - event: BassetAdded(indexed address,address)
+          handler: handleBassetAdded
+        - event: BassetRemoved(indexed address)
+          handler: handleBassetRemoved
+        - event: BasketWeightsUpdated(address[],uint256[])
+          handler: handleBasketWeightsUpdated
+        - event: BassetStatusChanged(indexed address,uint8)
+          handler: handleBassetStatusChanged
+        - event: BasketStatusChanged()
+          handler: handleBasketStatusChanged
+
+  - kind: ethereum/contract
+    name: RewardsDistributor
+    network: '{{network}}'
+    source:
+      abi: RewardsDistributor
+      address: '{{address_RewardsDistributor}}'
+      startBlock: {{startBlock_RewardsDistributor}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/RewardsDistributor.ts
+      entities:
+        - RewardsDistributor
+        - Account
+        - StakingRewards
+        - StakingRewardsWithPlatformToken
+      abis:
+        - name: RewardsDistributor
+          file: ./abis/RewardsDistributor.json
+        - name: StakingRewards
+          file: ./abis/StakingRewards.json
+        - name: StakingRewardsWithPlatformToken
+          file: ./abis/StakingRewardsWithPlatformToken.json
+        - name: ERC20Detailed
+          file: ./abis/ERC20Detailed.json
+      eventHandlers:
+        - event: RemovedFundManager(indexed address)
+          handler: handleRemovedFundManager
+        - event: Whitelisted(indexed address)
+          handler: handleWhitelisted
+        - event: DistributedReward(address,address,address,uint256)
+          handler: handleDistributedReward
+
+  # This could also be a template, if there were an event to listen to
+  # to create the contracts
+  - kind: ethereum/contract
+    name: MerkleDrop
+    network: '{{network}}'
+    source:
+      abi: MerkleDrop
+      address: '{{address_MerkleDrop_BAL}}'
+      startBlock: {{startBlock_MerkleDrop_BAL}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/MerkleDrop.ts
+      entities:
+        - MerkleDrop
+        - MerkleDropClaim
+        - MerkleDropTranche
+      abis:
+        - name: MerkleDrop
+          file: ./abis/MerkleDrop.json
+      eventHandlers:
+        - event: Claimed(address,uint256,uint256)
+          handler: handleClaimed
+        - event: TrancheAdded(uint256,bytes32,uint256)
+          handler: handleTrancheAdded
+        - event: TrancheExpired(uint256)
+          handler: handleTrancheExpired
+        - event: RemovedFunder(indexed address)
+          handler: handleRemovedFunder
+        - event: Whitelisted(indexed address)
+          handler: handleWhitelisted
+
+templates:
+  - kind: ethereum/contract
+    name: SavingsContract
+    network: '{{network}}'
+    source:
+      abi: SavingsContract
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/SavingsContract.ts
+      entities:
+        - Token
+      abis:
+        - name: SavingsContract
+          file: ./abis/SavingsContract.json
+      eventHandlers:
+        - event: AutomaticInterestCollectionSwitched(bool)
+          handler: handleAutomaticInterestCollectionSwitched
+        - event: ExchangeRateUpdated(uint256,uint256)
+          handler: handleExchangeRateUpdated
+        - event: SavingsDeposited(indexed address,uint256,uint256)
+          handler: handleSavingsDeposited
+        - event: CreditsRedeemed(indexed address,uint256,uint256)
+          handler: handleCreditsRedeemed
+
+  - kind: ethereum/contract
+    name: StakingRewards
+    network: '{{network}}'
+    source:
+      abi: StakingRewards
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/StakingRewards/StakingRewards.ts
+      entities:
+        - StakingRewardsContract
+      abis:
+        - name: StakingRewards
+          file: ./abis/StakingRewards.json
+        - name: StakingRewardsWithPlatformToken
+          file: ./abis/StakingRewardsWithPlatformToken.json
+      eventHandlers:
+        - event: RewardAdded(uint256)
+          handler: handleRewardAdded
+        - event: Staked(indexed address,uint256,address)
+          handler: handleStaked
+        - event: Withdrawn(indexed address,uint256)
+          handler: handleWithdrawn
+        - event: RewardPaid(indexed address,uint256)
+          handler: handleRewardPaid
+
+  - kind: ethereum/contract
+    name: StakingRewardsWithPlatformToken
+    network: '{{network}}'
+    source:
+      abi: StakingRewardsWithPlatformToken
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/StakingRewards/StakingRewardsWithPlatformToken.ts
+      entities:
+        - StakingRewardsContract
+      abis:
+        - name: StakingRewards
+          file: ./abis/StakingRewards.json
+        - name: StakingRewardsWithPlatformToken
+          file: ./abis/StakingRewardsWithPlatformToken.json
+      eventHandlers:
+        - event: RewardAdded(uint256,uint256)
+          handler: handleRewardAdded
+        - event: Staked(indexed address,uint256,address)
+          handler: handleStaked
+        - event: Withdrawn(indexed address,uint256)
+          handler: handleWithdrawn
+        - event: RewardPaid(indexed address,uint256,uint256)
+          handler: handleRewardPaid

@@ -1,0 +1,43 @@
+fragment PoolDetails on Pool {
+  address: id
+  totalShares
+  totalSwapVolume
+  totalWeight
+  swapFee
+  tokens {
+    address
+    balance
+    decimals
+    symbol
+    denormWeight
+  }
+}
+
+fragment TokenPriceDetails on TokenPrice {
+  address: id
+  price
+  decimals
+}
+
+query Pools($ids: [ID!]!, $includeHistoric: Boolean!, $block: Block_height)
+  @api(name: balancer) {
+  current: pools(where: { id_in: $ids }) {
+    ...PoolDetails
+  }
+  historic: pools(where: { id_in: $ids }, block: $block)
+    @include(if: $includeHistoric) {
+    ...PoolDetails
+  }
+}
+
+query TokenPrices($tokens: [ID!]!) @api(name: balancer) {
+  tokenPrices(where: { id_in: $tokens }) {
+    ...TokenPriceDetails
+  }
+}
+
+query TokenPrice($token: ID!) @api(name: balancer) {
+  tokenPrice(id: $token) {
+    ...TokenPriceDetails
+  }
+}
