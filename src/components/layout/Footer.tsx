@@ -135,19 +135,19 @@ const Container = styled.footer<Props>`
 
 const links = [
   { title: 'mStable', href: 'https://mstable.org' },
-  { title: 'Docs', href: 'https://docs.mstable.org' },
-  { title: 'Code', href: 'https://github.com/mstable' },
-  { title: 'FAQ', href: '/faq' },
-  { title: 'Analytics', href: '/analytics' },
-  { title: 'Governance', href: 'https://governance.mstable.org' },
+  // { title: 'Docs', href: 'https://docs.mstable.org' },
+  { title: 'Code', href: 'https://github.com/XStableDollar' },
+  // { title: 'FAQ', href: '/faq' },
+  // { title: 'Analytics', href: '/analytics' },
+  // { title: 'Governance', href: 'https://governance.mstable.org' },
 ];
 
 const socialIcons = [
-  { title: 'Github', icon: Github, href: 'https://github.com/mstable' },
-  { title: 'Discord', icon: Discord, href: 'https://discord.gg/pgCVG7e' },
-  { title: 'Twitter', icon: Twitter, href: 'https://twitter.com/mstable_' },
-  { title: 'Medium', icon: Medium, href: 'https://medium.com/mstable' },
-  { title: 'Email', icon: Email, href: 'mailto:info@mstable.org' },
+  { title: 'Github', icon: Github, href: 'https://github.com/XStableDollar' },
+  // { title: 'Discord', icon: Discord, href: 'https://discord.gg/pgCVG7e' },
+  // { title: 'Twitter', icon: Twitter, href: 'https://twitter.com/mstable_' },
+  // { title: 'Medium', icon: Medium, href: 'https://medium.com/mstable' },
+  // { title: 'Email', icon: Email, href: 'mailto:info@mstable.org' },
 ];
 
 export const Footer: FC<Props> = ({ accountOpen }) => {
@@ -197,12 +197,12 @@ export const Footer: FC<Props> = ({ accountOpen }) => {
               <Masquerade />
             </div>
             <GitHubButton
-              href="https://github.com/mstable/mStable-contracts"
+              href="https://github.com/XStableDollar/XStableDollar-contracts"
               data-icon="octicon-star"
               data-show-count
               aria-label="Star mstable/mStable-contracts on GitHub"
             >
-              mStable-contracts
+              XStabler-contracts
             </GitHubButton>
           </Gubbins>
         </div>

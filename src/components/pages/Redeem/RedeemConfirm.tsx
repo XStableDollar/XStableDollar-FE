@@ -26,13 +26,13 @@ export const RedeemConfirm: FC<{}> = () => {
           mode === Mode.RedeemMasset ? (
             <>
               There is a redemption fee of{' '}
-              <CountUp end={feeAmount.simple} decimals={6} /> mUSD (
+              <CountUp end={feeAmount.simple} decimals={6} /> XSDT (
               {formatExactAmount(mAsset.redemptionFeeRate, 16, '%', true, 3)})
             </>
           ) : (
             <>
               There is a swap fee of{' '}
-              <CountUp end={feeAmount.simple} decimals={6} /> mUSD (
+              <CountUp end={feeAmount.simple} decimals={6} /> XSDT (
               {formatExactAmount(mAsset.feeRate, 16, '%', true, 3)})
             </>
           )

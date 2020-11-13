@@ -79,9 +79,9 @@ export const Mint: FC<{}> = () => (
       <PageHeader
         icon={<MintIcon />}
         title="MINT"
-        subtitle="Convert stablecoins into mUSD"
+        subtitle="Convert stablecoins into XSDT"
       >
-        <P>Get mUSD by depositing your stablecoin assets at a 1:1 ratio.</P>
+        <P>Get XSDT by depositing your stablecoin assets at a 1:1 ratio.</P>
       </PageHeader>
       <MintForm />
       <MusdStats />

@@ -76,7 +76,7 @@ export const MintInput: FC<{}> = () => {
         />
       </FormRow>
       <FormRow>
-        <H3>Receive mUSD</H3>
+        <H3>Receive XSDT</H3>
         {mAsset?.symbol ? (
           <LineItems symbol={mAsset?.symbol} data={lineItems} />
         ) : (

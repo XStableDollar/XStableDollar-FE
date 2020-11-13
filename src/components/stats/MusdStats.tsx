@@ -41,12 +41,12 @@ export const MusdStats: FC<{ simulation?: DataState }> = ({ simulation }) => {
       <H2>Basket Stats</H2>
       <StatsRow>
         <StatsGraphic>
-          <H3 borderTop>mUSD basket share</H3>
+          <H3 borderTop>XSDT basket share</H3>
           <BasketStats simulation={simulation} />
         </StatsGraphic>
         <StatsGraphicNull />
         <StatsGraphic>
-          <H3 borderTop>Total mUSD supply</H3>
+          <H3 borderTop>Total XSDT supply</H3>
           {realTotalSupply ? (
             <CountUp end={realTotalSupply.simple} decimals={2} />
           ) : (

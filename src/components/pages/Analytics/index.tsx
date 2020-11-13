@@ -151,10 +151,10 @@ export const Analytics: FC<{}> = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              mUSD on Etherscan
+              XSDT on Etherscan
             </a>
           </li>
-          <li>
+          {/* <li>
             <a
               href="https://thegraph.com/explorer/subgraph/mstable/mstable-protocol"
               target="_blank"
@@ -162,7 +162,7 @@ export const Analytics: FC<{}> = () => {
             >
               mStable Subgraph explorer
             </a>
-          </li>
+          </li> */}
         </ThirdPartySources>
       </Section>
     </div>

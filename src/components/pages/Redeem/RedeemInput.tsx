@@ -96,7 +96,7 @@ export const RedeemInput: FC<{}> = () => {
       <CurveProtip>
         <CurveToken symbol="CRV" />
         <P>
-          Swap mUSD for DAI, USDC and USDT on{' '}
+          Swap XSDT for DAI, USDC and USDT on{' '}
           <ExternalLink href="https://www.curve.fi/musd">
             Curve Finance
           </ExternalLink>
@@ -104,7 +104,7 @@ export const RedeemInput: FC<{}> = () => {
         </P>
       </CurveProtip>
       <FormRow>
-        <H3>Send mUSD</H3>
+        <H3>Send XSDT</H3>
         <RedeemMode>
           <ToggleInput
             onClick={toggleRedeemMasset}
@@ -154,13 +154,13 @@ export const RedeemInput: FC<{}> = () => {
         <BassetInputs
           initialized={initialized}
           bAssets={bAssets}
-          assetTooltip="Your mUSD will be exchanged for these assets"
+          assetTooltip="Your XSDT will be exchanged for these assets"
           Input={BassetOutput}
         />
       </FormRow>
       <FormRow>
         <H3>Effects</H3>
-        <P>See how this redemption affects mUSD and its basket of assets.</P>
+        <P>See how this redemption affects XSDT and its basket of assets.</P>
         <div>
           <BasketImpact>
             <div>

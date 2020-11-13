@@ -23,11 +23,11 @@ type Section = 'volumes' | 'totals' | 'basket' | 'save';
 
 export const AnalyticsLink: FC<{ section?: Section }> = () => (
   <Container>
-    <Link to="/analytics">
+    {/* <Link to="/analytics">
       <span role="img" aria-label="chart">
         📊
       </span>{' '}
       View analytics
-    </Link>
+    </Link> */}
   </Container>
 );
