@@ -66,7 +66,7 @@ const Container = styled.div`
 export const LineItems: FC<Props> = ({ data, symbol }) => (
   <Container>
     <div>
-      <Token symbol={symbol} />
+      {/* <Token symbol={symbol} />  //TODO */}
     </div>
     <div>
       {data.map(({ id, label, countUp, highlight }) => (

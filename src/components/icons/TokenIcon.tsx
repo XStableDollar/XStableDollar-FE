@@ -1,6 +1,6 @@
 import React, { FC, SVGProps } from 'react';
 import styled from 'styled-components';
-import mUSDTransparent from './tokens/mUSD-transparent.svg';
+// import mUSDTransparent from './tokens/mUSD-transparent.svg';
 import MUSD, { ReactComponent as MusdSvg } from './tokens/mUSD.svg';
 import TUSD, { ReactComponent as TusdSvg } from './tokens/TUSD.svg';
 import USDT, { ReactComponent as UsdtSvg } from './tokens/USDT.svg';
@@ -75,7 +75,7 @@ const Image = styled.img`
 `;
 
 export const MUSDIconTransparent = (): JSX.Element => (
-  <Image src={mUSDTransparent} alt="mUSD" />
+  <p>XSDT</p>
 );
 
 export const TokenIcon: FC<Props> = ({ className, symbol }) =>
