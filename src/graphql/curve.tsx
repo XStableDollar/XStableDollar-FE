@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
-
 export type Maybe<T> = T | null;
 
       export interface IntrospectionResultData {
@@ -23,9 +22,6 @@ export type Maybe<T> = T | null;
         "name": "PoolEvent",
         "possibleTypes": [
           {
-            "name": "Exchange"
-          },
-          {
             "name": "FeeChangeChangelog"
           },
           {
@@ -41,7 +37,22 @@ export type Maybe<T> = T | null;
             "name": "RemoveLiquidityEvent"
           },
           {
+            "name": "RemoveLiquidityOneEvent"
+          },
+          {
             "name": "TransferOwnershipEvent"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "Exchange",
+        "possibleTypes": [
+          {
+            "name": "TokenExchange"
+          },
+          {
+            "name": "UnderlyingTokenExchange"
           }
         ]
       }
@@ -60,6 +71,26 @@ export type Scalars = {
   Bytes: string;
   BigInt: string;
   BigDecimal: string;
+};
+
+export type _Block_ = {
+  /** The hash of the block */
+  hash?: Maybe<Scalars['Bytes']>;
+  /** The block number */
+  number: Scalars['Int'];
+};
+
+/** The type for the top-level _meta field */
+export type _Meta_ = {
+  /**
+   * Information about a specific subgraph block. The hash of the block
+   * will be null if the _meta field has a block constraint that asks for
+   * a block number. It will be filled if the _meta field has no block constraint
+   * and therefore asks for the latest  block
+   */
+  block: _Block_;
+  /** The deployment ID */
+  deployment: Scalars['String'];
 };
 
 export type AddLiquidityEvent = PoolEvent & {
@@ -319,8 +350,7 @@ export type Block_Height = {
 };
 
 
-export type Exchange = PoolEvent & {
-  id: Scalars['ID'];
+export type Exchange = {
   pool: Pool;
   buyer: Scalars['Bytes'];
   soldId: Scalars['BigInt'];
@@ -333,14 +363,6 @@ export type Exchange = PoolEvent & {
 };
 
 export type Exchange_Filter = {
-  id?: Maybe<Scalars['ID']>;
-  id_not?: Maybe<Scalars['ID']>;
-  id_gt?: Maybe<Scalars['ID']>;
-  id_lt?: Maybe<Scalars['ID']>;
-  id_gte?: Maybe<Scalars['ID']>;
-  id_lte?: Maybe<Scalars['ID']>;
-  id_in?: Maybe<Array<Scalars['ID']>>;
-  id_not_in?: Maybe<Array<Scalars['ID']>>;
   pool?: Maybe<Scalars['String']>;
   pool_not?: Maybe<Scalars['String']>;
   pool_gt?: Maybe<Scalars['String']>;
@@ -418,7 +440,6 @@ export type Exchange_Filter = {
 };
 
 export enum Exchange_OrderBy {
-  Id = 'id',
   Pool = 'pool',
   Buyer = 'buyer',
   SoldId = 'soldId',
@@ -808,14 +829,22 @@ export type Query = {
   addLiquidityEvents: Array<AddLiquidityEvent>;
   removeLiquidityEvent?: Maybe<RemoveLiquidityEvent>;
   removeLiquidityEvents: Array<RemoveLiquidityEvent>;
-  exchange?: Maybe<Exchange>;
-  exchanges: Array<Exchange>;
+  removeLiquidityOneEvent?: Maybe<RemoveLiquidityOneEvent>;
+  removeLiquidityOneEvents: Array<RemoveLiquidityOneEvent>;
+  tokenExchange?: Maybe<TokenExchange>;
+  tokenExchanges: Array<TokenExchange>;
+  underlyingTokenExchange?: Maybe<UnderlyingTokenExchange>;
+  underlyingTokenExchanges: Array<UnderlyingTokenExchange>;
   transferOwnershipEvent?: Maybe<TransferOwnershipEvent>;
   transferOwnershipEvents: Array<TransferOwnershipEvent>;
   token?: Maybe<Token>;
   tokens: Array<Token>;
   poolEvent?: Maybe<PoolEvent>;
   poolEvents: Array<PoolEvent>;
+  exchange?: Maybe<Exchange>;
+  exchanges: Array<Exchange>;
+  /** Access to subgraph metadata */
+  _meta?: Maybe<_Meta_>;
 };
 
 
@@ -931,18 +960,50 @@ export type QueryRemoveLiquidityEventsArgs = {
 };
 
 
-export type QueryExchangeArgs = {
+export type QueryRemoveLiquidityOneEventArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
 
 
-export type QueryExchangesArgs = {
+export type QueryRemoveLiquidityOneEventsArgs = {
   skip?: Maybe<Scalars['Int']>;
   first?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Exchange_OrderBy>;
+  orderBy?: Maybe<RemoveLiquidityOneEvent_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
-  where?: Maybe<Exchange_Filter>;
+  where?: Maybe<RemoveLiquidityOneEvent_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryTokenExchangeArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryTokenExchangesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<TokenExchange_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<TokenExchange_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryUnderlyingTokenExchangeArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryUnderlyingTokenExchangesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<UnderlyingTokenExchange_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<UnderlyingTokenExchange_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -991,6 +1052,27 @@ export type QueryPoolEventsArgs = {
   orderBy?: Maybe<PoolEvent_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<PoolEvent_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryExchangeArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryExchangesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Exchange_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Exchange_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type Query_MetaArgs = {
   block?: Maybe<Block_Height>;
 };
 
@@ -1097,6 +1179,107 @@ export enum RemoveLiquidityEvent_OrderBy {
   Transaction = 'transaction'
 }
 
+export type RemoveLiquidityOneEvent = PoolEvent & {
+  id: Scalars['ID'];
+  pool: Pool;
+  provider: Scalars['Bytes'];
+  tokenAmount: Scalars['BigInt'];
+  coinAmount: Scalars['BigInt'];
+  tokenSupply: Scalars['BigInt'];
+  block: Scalars['BigInt'];
+  timestamp: Scalars['BigInt'];
+  transaction: Scalars['Bytes'];
+};
+
+export type RemoveLiquidityOneEvent_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  pool?: Maybe<Scalars['String']>;
+  pool_not?: Maybe<Scalars['String']>;
+  pool_gt?: Maybe<Scalars['String']>;
+  pool_lt?: Maybe<Scalars['String']>;
+  pool_gte?: Maybe<Scalars['String']>;
+  pool_lte?: Maybe<Scalars['String']>;
+  pool_in?: Maybe<Array<Scalars['String']>>;
+  pool_not_in?: Maybe<Array<Scalars['String']>>;
+  pool_contains?: Maybe<Scalars['String']>;
+  pool_not_contains?: Maybe<Scalars['String']>;
+  pool_starts_with?: Maybe<Scalars['String']>;
+  pool_not_starts_with?: Maybe<Scalars['String']>;
+  pool_ends_with?: Maybe<Scalars['String']>;
+  pool_not_ends_with?: Maybe<Scalars['String']>;
+  provider?: Maybe<Scalars['Bytes']>;
+  provider_not?: Maybe<Scalars['Bytes']>;
+  provider_in?: Maybe<Array<Scalars['Bytes']>>;
+  provider_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  provider_contains?: Maybe<Scalars['Bytes']>;
+  provider_not_contains?: Maybe<Scalars['Bytes']>;
+  tokenAmount?: Maybe<Scalars['BigInt']>;
+  tokenAmount_not?: Maybe<Scalars['BigInt']>;
+  tokenAmount_gt?: Maybe<Scalars['BigInt']>;
+  tokenAmount_lt?: Maybe<Scalars['BigInt']>;
+  tokenAmount_gte?: Maybe<Scalars['BigInt']>;
+  tokenAmount_lte?: Maybe<Scalars['BigInt']>;
+  tokenAmount_in?: Maybe<Array<Scalars['BigInt']>>;
+  tokenAmount_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  coinAmount?: Maybe<Scalars['BigInt']>;
+  coinAmount_not?: Maybe<Scalars['BigInt']>;
+  coinAmount_gt?: Maybe<Scalars['BigInt']>;
+  coinAmount_lt?: Maybe<Scalars['BigInt']>;
+  coinAmount_gte?: Maybe<Scalars['BigInt']>;
+  coinAmount_lte?: Maybe<Scalars['BigInt']>;
+  coinAmount_in?: Maybe<Array<Scalars['BigInt']>>;
+  coinAmount_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  tokenSupply?: Maybe<Scalars['BigInt']>;
+  tokenSupply_not?: Maybe<Scalars['BigInt']>;
+  tokenSupply_gt?: Maybe<Scalars['BigInt']>;
+  tokenSupply_lt?: Maybe<Scalars['BigInt']>;
+  tokenSupply_gte?: Maybe<Scalars['BigInt']>;
+  tokenSupply_lte?: Maybe<Scalars['BigInt']>;
+  tokenSupply_in?: Maybe<Array<Scalars['BigInt']>>;
+  tokenSupply_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  block?: Maybe<Scalars['BigInt']>;
+  block_not?: Maybe<Scalars['BigInt']>;
+  block_gt?: Maybe<Scalars['BigInt']>;
+  block_lt?: Maybe<Scalars['BigInt']>;
+  block_gte?: Maybe<Scalars['BigInt']>;
+  block_lte?: Maybe<Scalars['BigInt']>;
+  block_in?: Maybe<Array<Scalars['BigInt']>>;
+  block_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  timestamp?: Maybe<Scalars['BigInt']>;
+  timestamp_not?: Maybe<Scalars['BigInt']>;
+  timestamp_gt?: Maybe<Scalars['BigInt']>;
+  timestamp_lt?: Maybe<Scalars['BigInt']>;
+  timestamp_gte?: Maybe<Scalars['BigInt']>;
+  timestamp_lte?: Maybe<Scalars['BigInt']>;
+  timestamp_in?: Maybe<Array<Scalars['BigInt']>>;
+  timestamp_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  transaction?: Maybe<Scalars['Bytes']>;
+  transaction_not?: Maybe<Scalars['Bytes']>;
+  transaction_in?: Maybe<Array<Scalars['Bytes']>>;
+  transaction_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  transaction_contains?: Maybe<Scalars['Bytes']>;
+  transaction_not_contains?: Maybe<Scalars['Bytes']>;
+};
+
+export enum RemoveLiquidityOneEvent_OrderBy {
+  Id = 'id',
+  Pool = 'pool',
+  Provider = 'provider',
+  TokenAmount = 'tokenAmount',
+  CoinAmount = 'coinAmount',
+  TokenSupply = 'tokenSupply',
+  Block = 'block',
+  Timestamp = 'timestamp',
+  Transaction = 'transaction'
+}
+
 export type Subscription = {
   systemInfo?: Maybe<SystemInfo>;
   systemInfos: Array<SystemInfo>;
@@ -1112,14 +1295,22 @@ export type Subscription = {
   addLiquidityEvents: Array<AddLiquidityEvent>;
   removeLiquidityEvent?: Maybe<RemoveLiquidityEvent>;
   removeLiquidityEvents: Array<RemoveLiquidityEvent>;
-  exchange?: Maybe<Exchange>;
-  exchanges: Array<Exchange>;
+  removeLiquidityOneEvent?: Maybe<RemoveLiquidityOneEvent>;
+  removeLiquidityOneEvents: Array<RemoveLiquidityOneEvent>;
+  tokenExchange?: Maybe<TokenExchange>;
+  tokenExchanges: Array<TokenExchange>;
+  underlyingTokenExchange?: Maybe<UnderlyingTokenExchange>;
+  underlyingTokenExchanges: Array<UnderlyingTokenExchange>;
   transferOwnershipEvent?: Maybe<TransferOwnershipEvent>;
   transferOwnershipEvents: Array<TransferOwnershipEvent>;
   token?: Maybe<Token>;
   tokens: Array<Token>;
   poolEvent?: Maybe<PoolEvent>;
   poolEvents: Array<PoolEvent>;
+  exchange?: Maybe<Exchange>;
+  exchanges: Array<Exchange>;
+  /** Access to subgraph metadata */
+  _meta?: Maybe<_Meta_>;
 };
 
 
@@ -1235,18 +1426,50 @@ export type SubscriptionRemoveLiquidityEventsArgs = {
 };
 
 
-export type SubscriptionExchangeArgs = {
+export type SubscriptionRemoveLiquidityOneEventArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
 
 
-export type SubscriptionExchangesArgs = {
+export type SubscriptionRemoveLiquidityOneEventsArgs = {
   skip?: Maybe<Scalars['Int']>;
   first?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Exchange_OrderBy>;
+  orderBy?: Maybe<RemoveLiquidityOneEvent_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
-  where?: Maybe<Exchange_Filter>;
+  where?: Maybe<RemoveLiquidityOneEvent_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionTokenExchangeArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionTokenExchangesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<TokenExchange_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<TokenExchange_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionUnderlyingTokenExchangeArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionUnderlyingTokenExchangesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<UnderlyingTokenExchange_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<UnderlyingTokenExchange_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -1295,6 +1518,27 @@ export type SubscriptionPoolEventsArgs = {
   orderBy?: Maybe<PoolEvent_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<PoolEvent_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionExchangeArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionExchangesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Exchange_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Exchange_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type Subscription_MetaArgs = {
   block?: Maybe<Block_Height>;
 };
 
@@ -1452,6 +1696,117 @@ export enum Token_OrderBy {
   Symbol = 'symbol'
 }
 
+export type TokenExchange = Exchange & {
+  id: Scalars['ID'];
+  pool: Pool;
+  buyer: Scalars['Bytes'];
+  soldId: Scalars['BigInt'];
+  tokensSold: Scalars['BigInt'];
+  boughtId: Scalars['BigInt'];
+  tokensBought: Scalars['BigInt'];
+  block: Scalars['BigInt'];
+  timestamp: Scalars['BigInt'];
+  transaction: Scalars['Bytes'];
+};
+
+export type TokenExchange_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  pool?: Maybe<Scalars['String']>;
+  pool_not?: Maybe<Scalars['String']>;
+  pool_gt?: Maybe<Scalars['String']>;
+  pool_lt?: Maybe<Scalars['String']>;
+  pool_gte?: Maybe<Scalars['String']>;
+  pool_lte?: Maybe<Scalars['String']>;
+  pool_in?: Maybe<Array<Scalars['String']>>;
+  pool_not_in?: Maybe<Array<Scalars['String']>>;
+  pool_contains?: Maybe<Scalars['String']>;
+  pool_not_contains?: Maybe<Scalars['String']>;
+  pool_starts_with?: Maybe<Scalars['String']>;
+  pool_not_starts_with?: Maybe<Scalars['String']>;
+  pool_ends_with?: Maybe<Scalars['String']>;
+  pool_not_ends_with?: Maybe<Scalars['String']>;
+  buyer?: Maybe<Scalars['Bytes']>;
+  buyer_not?: Maybe<Scalars['Bytes']>;
+  buyer_in?: Maybe<Array<Scalars['Bytes']>>;
+  buyer_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  buyer_contains?: Maybe<Scalars['Bytes']>;
+  buyer_not_contains?: Maybe<Scalars['Bytes']>;
+  soldId?: Maybe<Scalars['BigInt']>;
+  soldId_not?: Maybe<Scalars['BigInt']>;
+  soldId_gt?: Maybe<Scalars['BigInt']>;
+  soldId_lt?: Maybe<Scalars['BigInt']>;
+  soldId_gte?: Maybe<Scalars['BigInt']>;
+  soldId_lte?: Maybe<Scalars['BigInt']>;
+  soldId_in?: Maybe<Array<Scalars['BigInt']>>;
+  soldId_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  tokensSold?: Maybe<Scalars['BigInt']>;
+  tokensSold_not?: Maybe<Scalars['BigInt']>;
+  tokensSold_gt?: Maybe<Scalars['BigInt']>;
+  tokensSold_lt?: Maybe<Scalars['BigInt']>;
+  tokensSold_gte?: Maybe<Scalars['BigInt']>;
+  tokensSold_lte?: Maybe<Scalars['BigInt']>;
+  tokensSold_in?: Maybe<Array<Scalars['BigInt']>>;
+  tokensSold_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  boughtId?: Maybe<Scalars['BigInt']>;
+  boughtId_not?: Maybe<Scalars['BigInt']>;
+  boughtId_gt?: Maybe<Scalars['BigInt']>;
+  boughtId_lt?: Maybe<Scalars['BigInt']>;
+  boughtId_gte?: Maybe<Scalars['BigInt']>;
+  boughtId_lte?: Maybe<Scalars['BigInt']>;
+  boughtId_in?: Maybe<Array<Scalars['BigInt']>>;
+  boughtId_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  tokensBought?: Maybe<Scalars['BigInt']>;
+  tokensBought_not?: Maybe<Scalars['BigInt']>;
+  tokensBought_gt?: Maybe<Scalars['BigInt']>;
+  tokensBought_lt?: Maybe<Scalars['BigInt']>;
+  tokensBought_gte?: Maybe<Scalars['BigInt']>;
+  tokensBought_lte?: Maybe<Scalars['BigInt']>;
+  tokensBought_in?: Maybe<Array<Scalars['BigInt']>>;
+  tokensBought_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  block?: Maybe<Scalars['BigInt']>;
+  block_not?: Maybe<Scalars['BigInt']>;
+  block_gt?: Maybe<Scalars['BigInt']>;
+  block_lt?: Maybe<Scalars['BigInt']>;
+  block_gte?: Maybe<Scalars['BigInt']>;
+  block_lte?: Maybe<Scalars['BigInt']>;
+  block_in?: Maybe<Array<Scalars['BigInt']>>;
+  block_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  timestamp?: Maybe<Scalars['BigInt']>;
+  timestamp_not?: Maybe<Scalars['BigInt']>;
+  timestamp_gt?: Maybe<Scalars['BigInt']>;
+  timestamp_lt?: Maybe<Scalars['BigInt']>;
+  timestamp_gte?: Maybe<Scalars['BigInt']>;
+  timestamp_lte?: Maybe<Scalars['BigInt']>;
+  timestamp_in?: Maybe<Array<Scalars['BigInt']>>;
+  timestamp_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  transaction?: Maybe<Scalars['Bytes']>;
+  transaction_not?: Maybe<Scalars['Bytes']>;
+  transaction_in?: Maybe<Array<Scalars['Bytes']>>;
+  transaction_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  transaction_contains?: Maybe<Scalars['Bytes']>;
+  transaction_not_contains?: Maybe<Scalars['Bytes']>;
+};
+
+export enum TokenExchange_OrderBy {
+  Id = 'id',
+  Pool = 'pool',
+  Buyer = 'buyer',
+  SoldId = 'soldId',
+  TokensSold = 'tokensSold',
+  BoughtId = 'boughtId',
+  TokensBought = 'tokensBought',
+  Block = 'block',
+  Timestamp = 'timestamp',
+  Transaction = 'transaction'
+}
+
 export type TransferOwnershipEvent = PoolEvent & {
   id: Scalars['ID'];
   pool: Pool;
@@ -1518,6 +1873,117 @@ export enum TransferOwnershipEvent_OrderBy {
   Id = 'id',
   Pool = 'pool',
   NewAdmin = 'newAdmin',
+  Block = 'block',
+  Timestamp = 'timestamp',
+  Transaction = 'transaction'
+}
+
+export type UnderlyingTokenExchange = Exchange & {
+  id: Scalars['ID'];
+  pool: Pool;
+  buyer: Scalars['Bytes'];
+  soldId: Scalars['BigInt'];
+  tokensSold: Scalars['BigInt'];
+  boughtId: Scalars['BigInt'];
+  tokensBought: Scalars['BigInt'];
+  block: Scalars['BigInt'];
+  timestamp: Scalars['BigInt'];
+  transaction: Scalars['Bytes'];
+};
+
+export type UnderlyingTokenExchange_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  pool?: Maybe<Scalars['String']>;
+  pool_not?: Maybe<Scalars['String']>;
+  pool_gt?: Maybe<Scalars['String']>;
+  pool_lt?: Maybe<Scalars['String']>;
+  pool_gte?: Maybe<Scalars['String']>;
+  pool_lte?: Maybe<Scalars['String']>;
+  pool_in?: Maybe<Array<Scalars['String']>>;
+  pool_not_in?: Maybe<Array<Scalars['String']>>;
+  pool_contains?: Maybe<Scalars['String']>;
+  pool_not_contains?: Maybe<Scalars['String']>;
+  pool_starts_with?: Maybe<Scalars['String']>;
+  pool_not_starts_with?: Maybe<Scalars['String']>;
+  pool_ends_with?: Maybe<Scalars['String']>;
+  pool_not_ends_with?: Maybe<Scalars['String']>;
+  buyer?: Maybe<Scalars['Bytes']>;
+  buyer_not?: Maybe<Scalars['Bytes']>;
+  buyer_in?: Maybe<Array<Scalars['Bytes']>>;
+  buyer_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  buyer_contains?: Maybe<Scalars['Bytes']>;
+  buyer_not_contains?: Maybe<Scalars['Bytes']>;
+  soldId?: Maybe<Scalars['BigInt']>;
+  soldId_not?: Maybe<Scalars['BigInt']>;
+  soldId_gt?: Maybe<Scalars['BigInt']>;
+  soldId_lt?: Maybe<Scalars['BigInt']>;
+  soldId_gte?: Maybe<Scalars['BigInt']>;
+  soldId_lte?: Maybe<Scalars['BigInt']>;
+  soldId_in?: Maybe<Array<Scalars['BigInt']>>;
+  soldId_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  tokensSold?: Maybe<Scalars['BigInt']>;
+  tokensSold_not?: Maybe<Scalars['BigInt']>;
+  tokensSold_gt?: Maybe<Scalars['BigInt']>;
+  tokensSold_lt?: Maybe<Scalars['BigInt']>;
+  tokensSold_gte?: Maybe<Scalars['BigInt']>;
+  tokensSold_lte?: Maybe<Scalars['BigInt']>;
+  tokensSold_in?: Maybe<Array<Scalars['BigInt']>>;
+  tokensSold_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  boughtId?: Maybe<Scalars['BigInt']>;
+  boughtId_not?: Maybe<Scalars['BigInt']>;
+  boughtId_gt?: Maybe<Scalars['BigInt']>;
+  boughtId_lt?: Maybe<Scalars['BigInt']>;
+  boughtId_gte?: Maybe<Scalars['BigInt']>;
+  boughtId_lte?: Maybe<Scalars['BigInt']>;
+  boughtId_in?: Maybe<Array<Scalars['BigInt']>>;
+  boughtId_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  tokensBought?: Maybe<Scalars['BigInt']>;
+  tokensBought_not?: Maybe<Scalars['BigInt']>;
+  tokensBought_gt?: Maybe<Scalars['BigInt']>;
+  tokensBought_lt?: Maybe<Scalars['BigInt']>;
+  tokensBought_gte?: Maybe<Scalars['BigInt']>;
+  tokensBought_lte?: Maybe<Scalars['BigInt']>;
+  tokensBought_in?: Maybe<Array<Scalars['BigInt']>>;
+  tokensBought_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  block?: Maybe<Scalars['BigInt']>;
+  block_not?: Maybe<Scalars['BigInt']>;
+  block_gt?: Maybe<Scalars['BigInt']>;
+  block_lt?: Maybe<Scalars['BigInt']>;
+  block_gte?: Maybe<Scalars['BigInt']>;
+  block_lte?: Maybe<Scalars['BigInt']>;
+  block_in?: Maybe<Array<Scalars['BigInt']>>;
+  block_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  timestamp?: Maybe<Scalars['BigInt']>;
+  timestamp_not?: Maybe<Scalars['BigInt']>;
+  timestamp_gt?: Maybe<Scalars['BigInt']>;
+  timestamp_lt?: Maybe<Scalars['BigInt']>;
+  timestamp_gte?: Maybe<Scalars['BigInt']>;
+  timestamp_lte?: Maybe<Scalars['BigInt']>;
+  timestamp_in?: Maybe<Array<Scalars['BigInt']>>;
+  timestamp_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  transaction?: Maybe<Scalars['Bytes']>;
+  transaction_not?: Maybe<Scalars['Bytes']>;
+  transaction_in?: Maybe<Array<Scalars['Bytes']>>;
+  transaction_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  transaction_contains?: Maybe<Scalars['Bytes']>;
+  transaction_not_contains?: Maybe<Scalars['Bytes']>;
+};
+
+export enum UnderlyingTokenExchange_OrderBy {
+  Id = 'id',
+  Pool = 'pool',
+  Buyer = 'buyer',
+  SoldId = 'soldId',
+  TokensSold = 'tokensSold',
+  BoughtId = 'boughtId',
+  TokensBought = 'tokensBought',
   Block = 'block',
   Timestamp = 'timestamp',
   Transaction = 'transaction'

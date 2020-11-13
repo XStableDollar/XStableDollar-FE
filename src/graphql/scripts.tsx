@@ -69,6 +69,26 @@ export type Scalars = {
   BigInt: string;
 };
 
+export type _Block_ = {
+  /** The hash of the block */
+  hash?: Maybe<Scalars['Bytes']>;
+  /** The block number */
+  number: Scalars['Int'];
+};
+
+/** The type for the top-level _meta field */
+export type _Meta_ = {
+  /**
+   * Information about a specific subgraph block. The hash of the block
+   * will be null if the _meta field has a block constraint that asks for
+   * a block number. It will be filled if the _meta field has no block constraint
+   * and therefore asks for the latest  block
+   */
+  block: _Block_;
+  /** The deployment ID */
+  deployment: Scalars['String'];
+};
+
 /** An Ethereum account with balances/credit balances */
 export type Account = {
   id: Scalars['ID'];
@@ -1010,6 +1030,8 @@ export type Query = {
   timeMetrics: Array<TimeMetric>;
   transaction?: Maybe<Transaction>;
   transactions: Array<Transaction>;
+  /** Access to subgraph metadata */
+  _meta?: Maybe<_Meta_>;
 };
 
 
@@ -1425,6 +1447,11 @@ export type QueryTransactionsArgs = {
   orderBy?: Maybe<Transaction_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Transaction_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type Query_MetaArgs = {
   block?: Maybe<Block_Height>;
 };
 
@@ -2292,6 +2319,8 @@ export type Subscription = {
   timeMetrics: Array<TimeMetric>;
   transaction?: Maybe<Transaction>;
   transactions: Array<Transaction>;
+  /** Access to subgraph metadata */
+  _meta?: Maybe<_Meta_>;
 };
 
 
@@ -2707,6 +2736,11 @@ export type SubscriptionTransactionsArgs = {
   orderBy?: Maybe<Transaction_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Transaction_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type Subscription_MetaArgs = {
   block?: Maybe<Block_Height>;
 };
 

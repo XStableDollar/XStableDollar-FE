@@ -157,7 +157,7 @@ type Query {
     """
     block: Block_height
   ): [RemoveLiquidityEvent!]!
-  exchange(
+  removeLiquidityOneEvent(
     id: ID!
     """
     The block at which the query should be executed. Can either be an `{ number:
@@ -165,20 +165,64 @@ type Query {
     block hash. Defaults to the latest block when omitted.
     """
     block: Block_height
-  ): Exchange
-  exchanges(
+  ): RemoveLiquidityOneEvent
+  removeLiquidityOneEvents(
     skip: Int = 0
     first: Int = 100
-    orderBy: Exchange_orderBy
+    orderBy: RemoveLiquidityOneEvent_orderBy
     orderDirection: OrderDirection
-    where: Exchange_filter
+    where: RemoveLiquidityOneEvent_filter
     """
     The block at which the query should be executed. Can either be an `{ number:
     Int }` containing the block number or a `{ hash: Bytes }` value containing a
     block hash. Defaults to the latest block when omitted.
     """
     block: Block_height
-  ): [Exchange!]!
+  ): [RemoveLiquidityOneEvent!]!
+  tokenExchange(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): TokenExchange
+  tokenExchanges(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: TokenExchange_orderBy
+    orderDirection: OrderDirection
+    where: TokenExchange_filter
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [TokenExchange!]!
+  underlyingTokenExchange(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): UnderlyingTokenExchange
+  underlyingTokenExchanges(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: UnderlyingTokenExchange_orderBy
+    orderDirection: OrderDirection
+    where: UnderlyingTokenExchange_filter
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [UnderlyingTokenExchange!]!
   transferOwnershipEvent(
     id: ID!
     """
@@ -245,6 +289,30 @@ type Query {
     """
     block: Block_height
   ): [PoolEvent!]!
+  exchange(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Exchange
+  exchanges(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Exchange_orderBy
+    orderDirection: OrderDirection
+    where: Exchange_filter
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Exchange!]!
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
 }
 input Block_height {
   hash: Bytes
@@ -488,7 +556,6 @@ interface PoolEvent {
   transaction: Bytes!
 }
 enum Exchange_orderBy {
-  id
   pool
   buyer
   soldId
@@ -500,14 +567,6 @@ enum Exchange_orderBy {
   transaction
 }
 input Exchange_filter {
-  id: ID
-  id_not: ID
-  id_gt: ID
-  id_lt: ID
-  id_gte: ID
-  id_lte: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
   pool: String
   pool_not: String
   pool_gt: String
@@ -583,8 +642,7 @@ input Exchange_filter {
   transaction_contains: Bytes
   transaction_not_contains: Bytes
 }
-type Exchange implements PoolEvent {
-  id: ID!
+interface Exchange {
   pool: Pool!
   buyer: Bytes!
   soldId: BigInt!
@@ -1166,6 +1224,320 @@ input RemoveLiquidityEvent_filter {
   transaction_contains: Bytes
   transaction_not_contains: Bytes
 }
+type RemoveLiquidityOneEvent implements PoolEvent {
+  id: ID!
+  pool: Pool!
+  provider: Bytes!
+  tokenAmount: BigInt!
+  coinAmount: BigInt!
+  tokenSupply: BigInt!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+enum RemoveLiquidityOneEvent_orderBy {
+  id
+  pool
+  provider
+  tokenAmount
+  coinAmount
+  tokenSupply
+  block
+  timestamp
+  transaction
+}
+input RemoveLiquidityOneEvent_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  pool: String
+  pool_not: String
+  pool_gt: String
+  pool_lt: String
+  pool_gte: String
+  pool_lte: String
+  pool_in: [String!]
+  pool_not_in: [String!]
+  pool_contains: String
+  pool_not_contains: String
+  pool_starts_with: String
+  pool_not_starts_with: String
+  pool_ends_with: String
+  pool_not_ends_with: String
+  provider: Bytes
+  provider_not: Bytes
+  provider_in: [Bytes!]
+  provider_not_in: [Bytes!]
+  provider_contains: Bytes
+  provider_not_contains: Bytes
+  tokenAmount: BigInt
+  tokenAmount_not: BigInt
+  tokenAmount_gt: BigInt
+  tokenAmount_lt: BigInt
+  tokenAmount_gte: BigInt
+  tokenAmount_lte: BigInt
+  tokenAmount_in: [BigInt!]
+  tokenAmount_not_in: [BigInt!]
+  coinAmount: BigInt
+  coinAmount_not: BigInt
+  coinAmount_gt: BigInt
+  coinAmount_lt: BigInt
+  coinAmount_gte: BigInt
+  coinAmount_lte: BigInt
+  coinAmount_in: [BigInt!]
+  coinAmount_not_in: [BigInt!]
+  tokenSupply: BigInt
+  tokenSupply_not: BigInt
+  tokenSupply_gt: BigInt
+  tokenSupply_lt: BigInt
+  tokenSupply_gte: BigInt
+  tokenSupply_lte: BigInt
+  tokenSupply_in: [BigInt!]
+  tokenSupply_not_in: [BigInt!]
+  block: BigInt
+  block_not: BigInt
+  block_gt: BigInt
+  block_lt: BigInt
+  block_gte: BigInt
+  block_lte: BigInt
+  block_in: [BigInt!]
+  block_not_in: [BigInt!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  transaction: Bytes
+  transaction_not: Bytes
+  transaction_in: [Bytes!]
+  transaction_not_in: [Bytes!]
+  transaction_contains: Bytes
+  transaction_not_contains: Bytes
+}
+type TokenExchange implements Exchange {
+  id: ID!
+  pool: Pool!
+  buyer: Bytes!
+  soldId: BigInt!
+  tokensSold: BigInt!
+  boughtId: BigInt!
+  tokensBought: BigInt!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+enum TokenExchange_orderBy {
+  id
+  pool
+  buyer
+  soldId
+  tokensSold
+  boughtId
+  tokensBought
+  block
+  timestamp
+  transaction
+}
+input TokenExchange_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  pool: String
+  pool_not: String
+  pool_gt: String
+  pool_lt: String
+  pool_gte: String
+  pool_lte: String
+  pool_in: [String!]
+  pool_not_in: [String!]
+  pool_contains: String
+  pool_not_contains: String
+  pool_starts_with: String
+  pool_not_starts_with: String
+  pool_ends_with: String
+  pool_not_ends_with: String
+  buyer: Bytes
+  buyer_not: Bytes
+  buyer_in: [Bytes!]
+  buyer_not_in: [Bytes!]
+  buyer_contains: Bytes
+  buyer_not_contains: Bytes
+  soldId: BigInt
+  soldId_not: BigInt
+  soldId_gt: BigInt
+  soldId_lt: BigInt
+  soldId_gte: BigInt
+  soldId_lte: BigInt
+  soldId_in: [BigInt!]
+  soldId_not_in: [BigInt!]
+  tokensSold: BigInt
+  tokensSold_not: BigInt
+  tokensSold_gt: BigInt
+  tokensSold_lt: BigInt
+  tokensSold_gte: BigInt
+  tokensSold_lte: BigInt
+  tokensSold_in: [BigInt!]
+  tokensSold_not_in: [BigInt!]
+  boughtId: BigInt
+  boughtId_not: BigInt
+  boughtId_gt: BigInt
+  boughtId_lt: BigInt
+  boughtId_gte: BigInt
+  boughtId_lte: BigInt
+  boughtId_in: [BigInt!]
+  boughtId_not_in: [BigInt!]
+  tokensBought: BigInt
+  tokensBought_not: BigInt
+  tokensBought_gt: BigInt
+  tokensBought_lt: BigInt
+  tokensBought_gte: BigInt
+  tokensBought_lte: BigInt
+  tokensBought_in: [BigInt!]
+  tokensBought_not_in: [BigInt!]
+  block: BigInt
+  block_not: BigInt
+  block_gt: BigInt
+  block_lt: BigInt
+  block_gte: BigInt
+  block_lte: BigInt
+  block_in: [BigInt!]
+  block_not_in: [BigInt!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  transaction: Bytes
+  transaction_not: Bytes
+  transaction_in: [Bytes!]
+  transaction_not_in: [Bytes!]
+  transaction_contains: Bytes
+  transaction_not_contains: Bytes
+}
+type UnderlyingTokenExchange implements Exchange {
+  id: ID!
+  pool: Pool!
+  buyer: Bytes!
+  soldId: BigInt!
+  tokensSold: BigInt!
+  boughtId: BigInt!
+  tokensBought: BigInt!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+enum UnderlyingTokenExchange_orderBy {
+  id
+  pool
+  buyer
+  soldId
+  tokensSold
+  boughtId
+  tokensBought
+  block
+  timestamp
+  transaction
+}
+input UnderlyingTokenExchange_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  pool: String
+  pool_not: String
+  pool_gt: String
+  pool_lt: String
+  pool_gte: String
+  pool_lte: String
+  pool_in: [String!]
+  pool_not_in: [String!]
+  pool_contains: String
+  pool_not_contains: String
+  pool_starts_with: String
+  pool_not_starts_with: String
+  pool_ends_with: String
+  pool_not_ends_with: String
+  buyer: Bytes
+  buyer_not: Bytes
+  buyer_in: [Bytes!]
+  buyer_not_in: [Bytes!]
+  buyer_contains: Bytes
+  buyer_not_contains: Bytes
+  soldId: BigInt
+  soldId_not: BigInt
+  soldId_gt: BigInt
+  soldId_lt: BigInt
+  soldId_gte: BigInt
+  soldId_lte: BigInt
+  soldId_in: [BigInt!]
+  soldId_not_in: [BigInt!]
+  tokensSold: BigInt
+  tokensSold_not: BigInt
+  tokensSold_gt: BigInt
+  tokensSold_lt: BigInt
+  tokensSold_gte: BigInt
+  tokensSold_lte: BigInt
+  tokensSold_in: [BigInt!]
+  tokensSold_not_in: [BigInt!]
+  boughtId: BigInt
+  boughtId_not: BigInt
+  boughtId_gt: BigInt
+  boughtId_lt: BigInt
+  boughtId_gte: BigInt
+  boughtId_lte: BigInt
+  boughtId_in: [BigInt!]
+  boughtId_not_in: [BigInt!]
+  tokensBought: BigInt
+  tokensBought_not: BigInt
+  tokensBought_gt: BigInt
+  tokensBought_lt: BigInt
+  tokensBought_gte: BigInt
+  tokensBought_lte: BigInt
+  tokensBought_in: [BigInt!]
+  tokensBought_not_in: [BigInt!]
+  block: BigInt
+  block_not: BigInt
+  block_gt: BigInt
+  block_lt: BigInt
+  block_gte: BigInt
+  block_lte: BigInt
+  block_in: [BigInt!]
+  block_not_in: [BigInt!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  transaction: Bytes
+  transaction_not: Bytes
+  transaction_in: [Bytes!]
+  transaction_not_in: [Bytes!]
+  transaction_contains: Bytes
+  transaction_not_contains: Bytes
+}
 type TransferOwnershipEvent implements PoolEvent {
   id: ID!
   pool: Pool!
@@ -1233,6 +1605,24 @@ input TransferOwnershipEvent_filter {
   transaction_not_in: [Bytes!]
   transaction_contains: Bytes
   transaction_not_contains: Bytes
+}
+"""The type for the top-level _meta field"""
+type _Meta_ {
+  """
+  Information about a specific subgraph block. The hash of the block
+  will be null if the _meta field has a block constraint that asks for
+  a block number. It will be filled if the _meta field has no block constraint
+  and therefore asks for the latest  block
+  """
+  block: _Block_!
+  """The deployment ID"""
+  deployment: String!
+}
+type _Block_ {
+  """The hash of the block"""
+  hash: Bytes
+  """The block number"""
+  number: Int!
 }
 type Subscription {
   systemInfo(
@@ -1389,7 +1779,7 @@ type Subscription {
     """
     block: Block_height
   ): [RemoveLiquidityEvent!]!
-  exchange(
+  removeLiquidityOneEvent(
     id: ID!
     """
     The block at which the query should be executed. Can either be an `{ number:
@@ -1397,20 +1787,64 @@ type Subscription {
     block hash. Defaults to the latest block when omitted.
     """
     block: Block_height
-  ): Exchange
-  exchanges(
+  ): RemoveLiquidityOneEvent
+  removeLiquidityOneEvents(
     skip: Int = 0
     first: Int = 100
-    orderBy: Exchange_orderBy
+    orderBy: RemoveLiquidityOneEvent_orderBy
     orderDirection: OrderDirection
-    where: Exchange_filter
+    where: RemoveLiquidityOneEvent_filter
     """
     The block at which the query should be executed. Can either be an `{ number:
     Int }` containing the block number or a `{ hash: Bytes }` value containing a
     block hash. Defaults to the latest block when omitted.
     """
     block: Block_height
-  ): [Exchange!]!
+  ): [RemoveLiquidityOneEvent!]!
+  tokenExchange(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): TokenExchange
+  tokenExchanges(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: TokenExchange_orderBy
+    orderDirection: OrderDirection
+    where: TokenExchange_filter
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [TokenExchange!]!
+  underlyingTokenExchange(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): UnderlyingTokenExchange
+  underlyingTokenExchanges(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: UnderlyingTokenExchange_orderBy
+    orderDirection: OrderDirection
+    where: UnderlyingTokenExchange_filter
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [UnderlyingTokenExchange!]!
   transferOwnershipEvent(
     id: ID!
     """
@@ -1477,4 +1911,28 @@ type Subscription {
     """
     block: Block_height
   ): [PoolEvent!]!
+  exchange(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Exchange
+  exchanges(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Exchange_orderBy
+    orderDirection: OrderDirection
+    where: Exchange_filter
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Exchange!]!
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
 }
