@@ -134,7 +134,7 @@ const Container = styled.footer<Props>`
 `;
 
 const links = [
-  { title: 'mStable', href: 'https://mstable.org' },
+  // { title: 'mStable', href: 'https://mstable.org' }, //TODO
   // { title: 'Docs', href: 'https://docs.mstable.org' },
   { title: 'Code', href: 'https://github.com/XStableDollar' },
   // { title: 'FAQ', href: '/faq' },
@@ -184,7 +184,7 @@ export const Footer: FC<Props> = ({ accountOpen }) => {
           </div>
           <Gubbins>
             <div>
-              <Version>
+              {/* <Version>
                 Current version{' '}
                 <a
                   href={`https://github.com/mstable/mStable-app/releases/tag/v${DAPP_VERSION}`}
@@ -193,14 +193,14 @@ export const Footer: FC<Props> = ({ accountOpen }) => {
                 >
                   <span>{DAPP_VERSION}</span>
                 </a>
-              </Version>
+              </Version> */}
               <Masquerade />
             </div>
             <GitHubButton
               href="https://github.com/XStableDollar/XStableDollar-contracts"
               data-icon="octicon-star"
               data-show-count
-              aria-label="Star mstable/mStable-contracts on GitHub"
+              aria-label="Star on GitHub"
             >
               XStabler-contracts
             </GitHubButton>

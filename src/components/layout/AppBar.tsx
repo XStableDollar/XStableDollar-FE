@@ -12,7 +12,7 @@ import {
   useToggleWallet,
 } from '../../context/AppProvider';
 import { Color, ViewportWidth } from '../../theme';
-import { ReactComponent as LogoSvg } from '../icons/mstable.svg';
+import LogoSvg from '../icons/xstable.jpg';
 import { UnstyledButton } from '../core/Button';
 import { centredLayout } from './css';
 import { TransactionStatus } from '../../types';
@@ -372,10 +372,9 @@ export const AppBar: FC = () => {
     <Container inverted={accountOpen} home={home}>
       <Inner>
         <Top>
-          <Logo inverted={accountOpen} full={home}>
-            <Link to="/" title="Home" onClick={closeAccount}>
-              <LogoSvg />
-            </Link>
+          <Logo inverted={accountOpen} full={true}>
+              {/* <LogoSvg /> */}
+              <img src={LogoSvg} style={{width:'100%', height:'100%'}}/>
           </Logo>
           <Buttons>
             {home ? null : <NotificationsButton />}

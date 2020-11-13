@@ -232,7 +232,7 @@ const HOME_STEPS: {
         </SymbolBlock>
         <Block>
           <P>
-            Get mUSD by depositing your USDC, DAI, TUSD or USDT at a 1:1 ratio.
+            Get XSDT by depositing your USDC, DAI, TUSD or USDT at a 1:1 ratio.
           </P>
           <P>
             <Link to="/mint">Go to mint</Link>
@@ -252,7 +252,7 @@ const HOME_STEPS: {
           </Symbol>
         </SymbolBlock>
         <Block>
-          <P>Earn mUSD&rsquo;s native interest rate.</P>
+          <P>Earn XSDT&rsquo;s native interest rate.</P>
           <P>
             <Link to="/save">Go to save</Link>
           </P>
@@ -293,7 +293,7 @@ const HOME_STEPS: {
         </SymbolBlock>
         <Block>
           <P>
-            mStable rewards users who contribute mUSD liquidity across the DeFi
+            mStable rewards users who contribute XSDT liquidity across the DeFi
             ecosystem.
           </P>
           <P>
